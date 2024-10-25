@@ -6,7 +6,7 @@ import (
 )
 
 type UserRepository interface {
-	CreateUser(user types.CreateUserPayload) (*types.User, error)
+	CreateUser(user types.CreateUserPayload) error
 	GetUserByEmail(email string) (*types.User, error)
 	GetUserByID(id int) (*types.User, error)
 	UpdateUser(id int, payload types.User) error
@@ -21,8 +21,8 @@ func NewUserStore(db *sqlx.DB) *UserStore {
 	return &UserStore{db: db}
 }
 
-func (s *UserStore) CreateUser(user types.CreateUserPayload) (*types.User, error) {
-	return nil, nil
+func (s *UserStore) CreateUser(user types.CreateUserPayload) error {
+	return nil
 }
 
 func (s *UserStore) GetUserByEmail(email string) (*types.User, error) {

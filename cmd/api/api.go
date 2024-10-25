@@ -26,7 +26,6 @@ func (s *APIServer) Run() error {
 	userStore := repository.NewUserStore(s.db)
 	userHandler := handlers.NewUserHandler(userStore)
 	userHandler.RegisterRoutes(v1)
-	router.Handle("api/v1/", http.StripPrefix("/api/v1", v1))
-
+	router.Handle("/api/v1/", http.StripPrefix("/api/v1", v1))
 	return http.ListenAndServe(s.addr, router)
 }

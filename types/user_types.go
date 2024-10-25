@@ -3,7 +3,7 @@ package types
 type CreateUserPayload struct {
 	Email     string `json:"email"`
 	FirstName string `json:"firstName"`
-	Lastname  string `json:"lastName"`
+	LastName  string `json:"lastName"`
 	Password  string `json:"password"`
 }
 type User struct {
