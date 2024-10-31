@@ -26,7 +26,17 @@ func (s *UserStore) CreateUser(user types.CreateUserPayload) error {
 }
 
 func (s *UserStore) GetUserByEmail(email string) (*types.User, error) {
-	return nil, nil
+	query := `
+		SELECT id, email FROM users WHERE email = $1
+	`
+
+	var user types.User
+	err := s.db.Get(&user, query, email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 func (s *UserStore) GetUserByID(id int) (*types.User, error) {

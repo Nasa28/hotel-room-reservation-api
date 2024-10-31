@@ -69,8 +69,8 @@ func (h *UserHandler) handleCreateUser(w http.ResponseWriter, r *http.Request) {
 	u, err := h.UserRepository.GetUserByEmail(payload.Email)
 	if err != nil {
 		utils.WriteError(w, http.StatusBadRequest, err)
+		return
 	}
-
 	secret := []byte(config.Env.JWTSecret)
 	token, err := auth.CreateJWT(secret, u.ID)
 	if err != nil {

@@ -8,6 +8,13 @@ require (
 )
 
 require (
+	github.com/golang-migrate/migrate/v4 v4.18.1 // indirect
+	github.com/hashicorp/errwrap v1.1.0 // indirect
+	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	go.uber.org/atomic v1.11.0 // indirect
+)
+
+require (
 	github.com/Nasa28/CommerceCore v0.0.0-20241019094602-daef41c40e3c
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
