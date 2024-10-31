@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 
@@ -11,6 +12,10 @@ import (
 )
 
 func main() {
+	// Define the action flag with a default value of "up"
+	action := flag.String("action", "", "Define migration action: 'up' or 'down'")
+	flag.Parse()
+
 	conf := config.Env
 
 	dsn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s",
@@ -24,12 +29,19 @@ func main() {
 		log.Fatalf("Error creating migration instance: %v", err)
 	}
 
-	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
-		log.Fatalf("Error running migration: %v", err)
+	// Handle the action based on the flag value
+	switch *action {
+	case "up":
+		if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+			log.Fatalf("Error running migration up: %v", err)
+		}
+		fmt.Println("Migrations applied successfully!")
+	case "down":
+		if err := m.Down(); err != nil && err != migrate.ErrNoChange {
+			log.Fatalf("Error running migration down: %v", err)
+		}
+		fmt.Println("Migrations reverted successfully!")
+	default:
+		fmt.Println("Invalid action. Use 'up' or 'down'.")
 	}
-
-	if err := m.Down(); err != nil && err != migrate.ErrNoChange {
-		log.Fatalf("Error running migration: %v", err)
-	}
-	fmt.Println("Migrations ran successfully!")
 }

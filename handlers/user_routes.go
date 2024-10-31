@@ -42,10 +42,15 @@ func (h *UserHandler) handleCreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := h.UserRepository.GetUserByEmail(payload.Email)
+	result, err := h.UserRepository.GetUserByEmail(payload.Email)
 
-	if err == nil {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("user with email %s already exist", payload.Email))
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("error retrieving user: %v", err))
+		return
+	}
+
+	if (result != types.User{}) {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("user with email %s already exists", payload.Email))
 		return
 	}
 	hashedPassword, err := auth.HashedPassword(payload.Password)
@@ -55,10 +60,16 @@ func (h *UserHandler) handleCreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = h.UserRepository.CreateUser(types.CreateUserPayload{
-		FirstName: payload.FirstName,
-		LastName:  payload.LastName,
-		Email:     payload.Email,
-		Password:  hashedPassword,
+		Email:        payload.Email,
+		FirstName:    payload.FirstName,
+		LastName:     payload.LastName,
+		Password:     hashedPassword,
+		PhoneNumber:  payload.PhoneNumber,
+		StreetName:   payload.StreetName,
+		StreetNumber: payload.StreetNumber,
+		City:         payload.City,
+		State:        payload.State,
+		Country:      payload.Country,
 	})
 
 	if err != nil {
@@ -68,6 +79,7 @@ func (h *UserHandler) handleCreateUser(w http.ResponseWriter, r *http.Request) {
 
 	u, err := h.UserRepository.GetUserByEmail(payload.Email)
 	if err != nil {
+
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
 	}
